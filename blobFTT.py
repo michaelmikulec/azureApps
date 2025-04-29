@@ -1,150 +1,186 @@
 import os
 import json
 import tkinter as tk
-from tkinter.filedialog import askopenfilenames
+from tkinter import ttk
+from tkinter.scrolledtext import ScrolledText
+from tkinter.filedialog import askopenfilename
 from azure.storage.blob import BlobServiceClient
+
 
 class App(tk.Tk):
   def __init__(self):
     super().__init__()
-    self.title("Blob Storage File Transfer Tool")
+    base03      = "#002b36"
+    base02      = "#073642"
+    base01      = "#586e75"
+    base00      = "#657b83"
+    base0       = "#839496"
+    base1       = "#93a1a1"
+    yellow      = "#b58900"
+    orange      = "#cb4b16"
+    red         = "#dc322f"
+    magenta     = "#d33682"
+    violet      = "#6c71c4"
+    blue        = "#268bd2"
+    cyan        = "#2aa198"
+    green       = "#859900"
+
+    style = ttk.Style()
+    style.theme_use("clam") 
+
+    self.title("ETL Tool")
     self.state("zoomed")
     self.grid_columnconfigure(1, weight=5)
+    self.configure(background=base03)
 
-    font = ("Arial", 10)
-    justify = "left"
-    padx = 5
-    pady = 5
-    anchor = "nw"
-    sticky = "nw"
+    style.configure("Custom.TFrame",
+      background=base02,
+      sticky="nw",
+      anchor="nw",
+      padding=5,
+      borderwidth=0
+    )
+    style.configure("right.TFrame",
+      background=base02,
+      sticky="ne",
+      anchor="ne",
+      padding=5,
+      borderwidth=0
+    )
+    style.configure("h1.TLabel",
+      background=base02,
+      foreground=base1,
+      font=("Arial", 20, "italic"),
+      justify="left",
+      sticky="nw",
+      anchor="nw",
+      padding=5,
+      borderwidth=0
+    )
+    style.configure("h2.TLabel",
+      background=base02,
+      foreground=base1,
+      font=("Arial", 15),
+      justify="left",
+      sticky="nw",
+      anchor="nw",
+      padding=5,
+      borderwidth=0
+    )
+    style.configure("body.TLabel",
+      background=base02,
+      foreground=base1,
+      font=("Arial", 10),
+      justify="left",
+      sticky="nw",
+      anchor="nw",
+      padding=5,
+      borderwidth=0
+    )
+    style.configure("Custom.TButton",
+      background=base03,
+      foreground=base1,
+      font=("Arial", 10),
+      justify="left",
+      sticky="nw",
+      anchor="nw",
+      padding=5,
+      borderwidth=0
+    )
+    style.map("Custom.TButton",
+      background=[("pressed", magenta), ("disabled", magenta), ("active", magenta)],
+      foreground=[("disabled", magenta), ("pressed", magenta), ("active", magenta)]
+    )
+    style.configure("Custom.TCombobox",
+      fieldbackground=base03,
+      background=base03,
+      foreground=base1,
+      arrowcolor=cyan,
+      bordercolor=base03
+    )
 
-    self.filePaths = []
-    self.configPath = [] 
-    self.blobName = tk.StringVar(value="")
-    self.stgAccName = tk.StringVar(value="")
-    self.stgAccKey = tk.StringVar(value="")
-    self.containerName = tk.StringVar(value="")
+    projects = [
+      "36001-2 Sunrise - Las Olas", 
+      "36001-2 Jupiter Bridge", 
+      "36001-2 North Causeway",
+      "36001-2 Town of Palm Beach",
+      "36001-2 A1A-Hollywood",
+      "36001-2 Loxahatchee Road",
+      "36001-4 Beeline Highway"
+    ]
+    etl = [
+      "Safety Data ETL", 
+      "Secondary Crash Data ETL",
+      "Mobility Data ETL",
+      "Drive Test Data ETL"
+    ]
+    tasks = [
+      "Initial Setup", 
+      "Monthly ETL process",
+      "Data Validation",
+      "Process Validation"
+    ]
 
-    self.frame0 = tk.Frame(self)
-    self.frame0.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
-    self.selectFilesButton = tk.Button(self.frame0, text="Select Files", font=font, justify=justify, anchor=anchor, command=self.selectFiles)
-    self.selectFilesButton.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
+    self.filePath = tk.StringVar(value="")
+    self.project = tk.StringVar(value="") 
+    self.etl = tk.StringVar(value="")
+    self.task = tk.StringVar(value="")
 
-    self.frame1 = tk.Frame(self)
-    self.frame1.grid(row=1, column=0, sticky=sticky, padx=padx, pady=pady)
-    self.selectedFilesLabel = tk.Label(self.frame1, text="Selected Files: ", font=font, justify=justify, anchor=anchor)
-    self.selectedFilesLabel.grid(row=0, column=1, sticky=sticky, padx=padx, pady=pady)
+    self.titleFrame = ttk.Frame(self, style="Custom.TFrame")
+    self.titleFrame.grid(row=0, column=0)
+    self.titleLabel = ttk.Label(self.titleFrame, text="ETL Tool", style="h1.TLabel")
+    self.titleLabel.grid(row=0, column=0)
 
-    self.frame2 = tk.Frame(self)
-    self.frame2.grid(row=2, column=0, sticky=sticky, padx=padx, pady=pady)
-    self.selectConfigButton = tk.Button(self.frame2, text="Select Config", font=font, justify=justify, anchor=anchor, command=self.selectConfig)
-    self.selectConfigButton.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
+    self.configFrame = ttk.Frame(self, style="Custom.TFrame")
+    self.configFrame.grid(row=1, column=0)
+    self.configFrameTitle = ttk.Label(self.configFrame, text="Configuration", style="h2.TLabel")
+    self.configFrameTitle.grid(row=0, column=0)
+    self.selectFileButton = ttk.Button(self.configFrame, text="Select File", style="Custom.TButton", command=self.selectFile)
+    self.selectFileButton.grid(row=1, column=0)
+    self.selectedFileLabel = ttk.Label(self.configFrame, text="", style="body.TLabel")
+    self.selectedFileLabel.grid(row=1, column=1)
+    self.selectProjectLabel = ttk.Label(self.configFrame, text="Select Project: ", style="body.TLabel")
+    self.selectProjectLabel.grid(row=2, column=0)
+    self.projectDropDown = ttk.Combobox(self.configFrame, textvariable=self.project, values=projects, state="readonly", style="Custom.TCombobox", width=30)
+    self.projectDropDown.grid(row=2, column=1)
+    self.selectEtlLabel = ttk.Label(self.configFrame, text="Select ETL Pipeline: ", style="body.TLabel")
+    self.selectEtlLabel.grid(row=3, column=0)
+    self.etlDropDown = ttk.Combobox(self.configFrame, textvariable=self.etl, values=etl, state="readonly", style="Custom.TCombobox", width=30)
+    self.etlDropDown.grid(row=3, column=1)
+    self.selectTaskLabel = ttk.Label(self.configFrame, text="Select Task: ", style="body.TLabel")
+    self.selectTaskLabel.grid(row=4, column=0)
+    self.taskDropDown = ttk.Combobox(self.configFrame, textvariable=self.task, values=tasks, state="readonly", style="Custom.TCombobox", width=30)
+    self.taskDropDown.grid(row=4, column=1)
+    self.runButton = ttk.Button(self.configFrame, text="Run Task", style="Custom.TButton", command=self.runTask)
+    self.runButton.grid(row=5, column=0)
 
-    self.frame3 = tk.Frame(self)
-    self.frame3.grid(row=3, column=0, sticky=sticky, padx=padx, pady=pady)
-    self.selectedConfigLabel = tk.Label(self.frame3, text="Selected Config: ", font=font, justify=justify, anchor=anchor)
-    self.selectedConfigLabel.grid(row=0, column=1, sticky=sticky, padx=padx, pady=pady)
+    self.outputFrame = ttk.Frame(self, style="right.TFrame")
+    self.outputFrame.grid(row=1, column=1)
+    self.outputFrameTitle = ttk.Label(self.outputFrame, text="Output", style="h2.TLabel")
+    self.outputFrameTitle.grid(row=0, column=0)
+    self.output = ScrolledText(self.outputFrame, height=30, width=80, state='disabled', font=("Consolas", 10))
+    self.output.grid(row=1, column=0)
 
-    # self.frame2 = tk.Frame(self)
-    # self.frame2.grid(row=2, column=0, sticky=sticky, padx=padx, pady=pady)
-    # self.stgAccNameLabel = tk.Label(self.frame2, text="Storage Account Name: ", font=font, justify=justify, anchor=anchor)
-    # self.stgAccNameLabel.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
-    # self.stgAccNameEntry = tk.Entry(self.frame2, textvariable=self.stgAccName, font=font, justify=justify)
-    # self.stgAccNameEntry.grid(row=0, column=1, sticky=sticky, padx=padx, pady=pady)
+  def selectFile(self):
+    self.filePath = askopenfilename()
+    self.selectedFileLabel.config(text=self.filePath)
 
-    # self.frame3 = tk.Frame(self)
-    # self.frame3.grid(row=3, column=0, sticky=sticky, padx=padx, pady=pady)
-    # self.stgAccKeyLabel = tk.Label(self.frame3, text="Storage Account Key: ", font=font, justify=justify, anchor=anchor)
-    # self.stgAccKeyLabel.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
-    # self.stgAccKeyEntry = tk.Entry(self.frame3, textvariable=self.stgAccKey, font=font, justify=justify)
-    # self.stgAccKeyEntry.grid(row=0, column=1, sticky=sticky, padx=padx, pady=pady)
+  def writeOutput(self, text):
+    self.output.configure(state='normal')
+    self.output.insert(tk.END, text + '\n')
+    self.output.see(tk.END)
+    self.output.configure(state='disabled')
 
-    # self.frame4 = tk.Frame(self)
-    # self.frame4.grid(row=4, column=0, sticky=sticky, padx=padx, pady=pady)
-    # self.containerNameLabel = tk.Label(self.frame4, text="Container Name: ", font=font, justify=justify, anchor=anchor)
-    # self.containerNameLabel.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
-    # self.containerNameEntry = tk.Entry(self.frame4, textvariable=self.containerName, font=font, justify=justify)
-    # self.containerNameEntry.grid(row=0, column=1, sticky=sticky, padx=padx, pady=pady)
+  def clearOutput(self):
+    self.output.configure(state='normal')
+    self.output.delete(1.0, tk.END)
+    self.output.configure(state='disabled')
 
-    self.frame5 = tk.Frame(self)
-    self.frame5.grid(row=5, column=0, sticky=sticky, padx=padx, pady=pady)
-    self.uploadButton = tk.Button(self.frame5, text="Upload Files", font=font, justify=justify, anchor=anchor, command=self.uploadFiles)
-    self.uploadButton.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
-
-    # self.frame6 = tk.Frame(self)
-    # self.frame6.grid(row=1, column=1, sticky=sticky, padx=padx, pady=pady)
-    # self.blobNameLabel = tk.Label(self.frame6, text="Blob Name: ", font=font, justify=justify, anchor=anchor)
-    # self.blobNameLabel.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
-    # self.blobNameEntry = tk.Entry(self.frame6, textvariable=self.blobName, font=font, justify=justify)
-    # self.blobNameEntry.grid(row=0, column=1, sticky=sticky, padx=padx, pady=pady)
-
-    self.frame8 = tk.Frame(self)
-    self.frame8.grid(row=2, column=1, sticky=sticky, padx=padx, pady=pady)
-    self.downloadButton = tk.Button(self.frame8, text="Download Blob", font=font, justify=justify, anchor=anchor, command=self.downloadBlob)
-    self.downloadButton.grid(row=0, column=0, sticky=sticky, padx=padx, pady=pady)
-
-  def selectFiles(self):
-    self.filePaths = askopenfilenames()
-    self.selectedFilesLabel.config(text="Selected Files:\n" + "\n".join(self.filePaths))
-  
-  def selectConfig(self):
-    self.configPath = askopenfilenames()
-    self.selectedConfigLabel.config(text="Selected Config:\n" + "\n".join(self.configPath))
-    with open(self.configPath[0], "r") as configFile:
-      config = json.load(configFile)
-    self.connectionString = config["connectionString"]
-    self.containerName = config["containerName"]
-    self.blobName = config["blobName"]
-
-  def uploadFiles(self):
-    containerClient = BlobServiceClient\
-      .from_connection_string(self.connectionString)\
-      .get_container_client(self.containerName)
-    for filePath in self.filePaths:
-      fileName = os.path.basename(filePath)
-      with open(filePath, "rb") as file:
-        containerClient.upload_blob(fileName, file, overwrite=True)
-    tk.messagebox.showinfo("Done", f"Uploaded {len(self.filePaths)} file(s) to blob storage container {self.containerName}")
-
-  def downloadBlob(self):
-    blobClient = BlobServiceClient\
-      .from_connection_string(self.connectionString)\
-      .get_container_client(self.containerName)\
-      .get_blob_client(self.blobName)
-    with open(self.blobName, "wb") as file:
-      file.write(blobClient.download_blob().readall())
-    tk.messagebox.showinfo("Done", f"Downloaded blob {self.blobName} from storage container {self.containerName}")
-
-  # def uploadFiles(self):
-  #   connectionString = (
-  #     f"DefaultEndpointsProtocol=https;"
-  #     f"AccountName={self.stgAccName.get()};"
-  #     f"AccountKey={self.stgAccKey.get()};"
-  #     f"EndpointSuffix=core.windows.net"
-  #   )
-  #   containerClient = BlobServiceClient\
-  #     .from_connection_string(connectionString)\
-  #     .get_container_client(self.containerName.get())
-  #   for filePath in self.filePaths:
-  #     fileName = os.path.basename(filePath)
-  #     with open(filePath, "rb") as file:
-  #       containerClient.upload_blob(fileName, file, overwrite=True)
-  #   tk.messagebox.showinfo("Done", f"Uploaded {len(self.filePaths)} file(s) to blob storage container {self.containerName.get()}")
-
-  # def downloadBlob(self):
-  #   connectionString = (
-  #     f"DefaultEndpointsProtocol=https;"
-  #     f"AccountName={self.stgAccName.get()};"
-  #     f"AccountKey={self.stgAccKey.get()};"
-  #     f"EndpointSuffix=core.windows.net"
-  #   )
-  #   containerClient = BlobServiceClient\
-  #     .from_connection_string(connectionString)\
-  #     .get_container_client(self.containerName.get())
-  #   blobClient = containerClient.get_blob_client(self.blobName.get())
-  #   with open(self.blobName.get(), "wb") as file:
-  #     file.write(blobClient.download_blob().readall())
-  #   tk.messagebox.showinfo("Done", f"Downloaded blob {self.blobName.get()} from storage container {self.containerName.get()}")
+  def runTask(self):
+    self.clearOutput()
+    self.writeOutput(f"{self.project.get()} | {self.etl.get()} | {self.task.get()}")
+    self.writeOutput("Running task...")
+    self.writeOutput("Task finished.")
 
 if __name__ == "__main__":
   App().mainloop()
