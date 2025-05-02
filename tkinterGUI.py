@@ -90,8 +90,62 @@ class App(tk.Tk):
         "borderwidth" : 1,
         "relief"      : "solid",
       }
-      self.optMenuKwargs = { 
-
+      self.menuButtonKwargs = {
+        # "activebackground": ,
+        # "activeforeground": ,
+        # "anchor": ,
+        "background": self.colors['bg3'],
+        # "bd": ,
+        # "bg": ,
+        # "bitmap": ,
+        "borderwidth": 1,
+        # "cursor": ,
+        # "direction": ,
+        # "disabledforeground": ,
+        # "fg": ,
+        "font": self.fonts['b'],
+        "foreground": self.colors['cyan'],
+        # "height": ,
+        # "highlightbackground": ,
+        # "highlightcolor": ,
+        # "highlightthickness": ,
+        # "image": ,
+        # "indicatoron": ,
+        # "justify": ,
+        # "menu": ,
+        # "padx": ,
+        # "pady": ,
+        "relief": "solid",
+        # "compound": ,
+        # "state": ,
+        # "takefocus": ,
+        # "text": ,
+        # "textvariable": ,
+        # "underline": ,
+        # "width": ,
+        # "wraplength": ,
+      }
+      self.menuKwargs = { 
+        # "activebackground": ,
+        # "activeborderwidth": ,
+        # "activeforeground": ,
+        "background": self.colors['bg3'],
+        # "bd": ,
+        # "bg": ,
+        "borderwidth": 1,
+        # "cursor": ,
+        # "disabledforeground": ,
+        # "fg": ,
+        "font": self.fonts['b'],
+        "foreground": self.colors['cyan'],
+        # "postcommand": ,
+        "relief": "solid",
+        # "selectcolor": ,
+        # "takefocus": ,
+        # "tearoff": ,
+        # "tearoffcommand": ,
+        # "title": ,
+        # "type": ,
       }
       self.sTextKwargs = {
         "state"       : 'disabled',
@@ -172,20 +226,22 @@ class App(tk.Tk):
       self.selectProjectLabel = tk.Label(self.configFrame, text="Select Project: ", **self.labelKwargs)
       self.selectProjectLabel.grid(row=2, column=0, **self.gridKwargs)
 
-      self.projectDropDown = tk.OptionMenu(self.configFrame, self.project, *self.projects, **self.optMenuKwargs)
-      self.projectDropDown.grid(row=2, column=1, **self.gridKwargs)
+      self.projectOptMenu = tk.OptionMenu(self.configFrame, self.project, *self.projects)
+      self.projectOptMenu.config(**self.menuButtonKwargs)
+      self.projectOptMenu['menu'].config(**self.menuKwargs)
+      self.projectOptMenu.grid(row=2, column=1, **self.gridKwargs)
 
       self.selectEtlLabel = tk.Label(self.configFrame, text="Select ETL Pipeline: ", **self.labelKwargs)
       self.selectEtlLabel.grid(row=3, column=0, **self.gridKwargs)
 
-      self.etlDropDown = tk.OptionMenu(self.configFrame, self.etl, *self.etls, **self.optMenuKwargs)
-      self.etlDropDown.grid(row=3, column=1, **self.gridKwargs)
+      self.etlOptMenu = tk.OptionMenu(self.configFrame, self.etl, *self.etls)
+      self.etlOptMenu.grid(row=3, column=1, **self.gridKwargs)
 
       self.selectTaskLabel = tk.Label(self.configFrame, text="Select Task: ", **self.labelKwargs)
       self.selectTaskLabel.grid(row=4, column=0, **self.gridKwargs)
 
-      self.taskDropDown = tk.OptionMenu(self.configFrame, self.task, *self.tasks, **self.optMenuKwargs)
-      self.taskDropDown.grid(row=4, column=1, **self.gridKwargs)
+      self.taskOptMenu = tk.OptionMenu(self.configFrame, self.task, *self.tasks)
+      self.taskOptMenu.grid(row=4, column=1, **self.gridKwargs)
 
       self.runButton = tk.Button(self.configFrame, text="Run Task", command=self.runTask, **self.buttonKwargs)
       self.runButton.grid(row=5, column=0, **self.gridKwargs)
