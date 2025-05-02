@@ -11,189 +11,199 @@ class App(tk.Tk):
   def __init__(self):
     super().__init__()
 
-    style = ttk.Style()
-    style.theme_use("clam") 
+    def _init_style():
+      self.fonts = {
+        "h1": ("Arial", 20),
+        "h1i": ("Arial", 20, "italic"),
+        "h1b": ("Arial", 20, "bold"),
+        "h2": ("Arial", 16),
+        "h2i": ("Arial", 16, "italic"),
+        "h2b": ("Arial", 16, "bold"),
+        "b": ("Arial", 10),
+        "bi": ("Arial", 10, "italic"),
+        "bb": ("Arial", 10, "bold"),
+        "m": ("Consolas", 12),
+        "mi": ("Consolas", 12, "italic"),
+        "mb": ("Consolas", 12, "bold"),
+      }
+      self.colors = {
+        "bg3"     : "#002b36",
+        "bg2"     : "#073642",
+        "bg1"     : "#586e75",
+        "bg0"     : "#657b83",
+        "fg0"     : "#839496",
+        "fg1"     : "#93a1a1",
+        "yellow"  : "#b58900",
+        "orange"  : "#cb4b16",
+        "red"     : "#dc322f",
+        "magenta" : "#d33682",
+        "violet"  : "#6c71c4",
+        "blue"    : "#268bd2",
+        "cyan"    : "#2aa198",
+        "green"   : "#859900",
+        "white"   : "#ffffff",
+        "black"   : "#000000",
+      }
+      self.reliefs = { 
+        "flat"   : "flat",
+        "raised" : "raised",
+        "sunken" : "sunken",
+        "ridge"  : "ridge",
+        "groove" : "groove",
+        "solid"  : "solid",
+      }
+      self.gridKwargs = {
+        "padx"   : 10,
+        "pady"   : 10,
+        "ipadx"  : 10,
+        "ipady"  : 10,
+        "sticky" : "nsew",
+      }
+      self.frameKwargs = {
+        "background"  : self.colors['bg2'],
+        "borderwidth" : 1,
+        "relief"      : "solid"
+      }
+      self.labelKwargs = {
+        "background"  : self.colors["bg3"],
+        "foreground"  : self.colors["cyan"],
+        "font"        : self.fonts['b'],
+        "justify"     : "left",
+        "anchor"      : "center",
+        "borderwidth" : 1,
+        "relief"      : "solid",
+      }
+      self.h1Kwargs = {
+        **self.labelKwargs,
+        "font": self.fonts['h1i'],
+      }
+      self.h2Kwargs = {
+        **self.labelKwargs,
+        "font": self.fonts['h2i'],
+      }
+      self.buttonKwargs = {
+        "background"  : self.colors['bg3'],
+        "foreground"  : self.colors['cyan'],
+        "font"        : ("Arial", 10),
+        "justify"     : "left",
+        "anchor"      : "center",
+        "borderwidth" : 1,
+        "relief"      : "solid",
+      }
+      self.optMenuKwargs = { 
 
-    colors = {
-      "bg3"     : "#002b36",
-      "bg2"     : "#073642",
-      "bg1"     : "#586e75",
-      "bg0"     : "#657b83",
-      "fg0"     : "#839496",
-      "fg1"     : "#93a1a1",
-      "yellow"  : "#b58900",
-      "orange"  : "#cb4b16",
-      "red"     : "#dc322f",
-      "magenta" : "#d33682",
-      "violet"  : "#6c71c4",
-      "blue"    : "#268bd2",
-      "cyan"    : "#2aa198",
-      "green"   : "#859900"
-    }
+      }
+      self.sTextKwargs = {
+        "state"       : 'disabled',
+        "background"  : self.colors['bg3'],
+        "foreground"  : self.colors['cyan'],
+        "font"        : self.fonts['m'],
+        "height"      : 30,
+        "width"       : 80,
+        "borderwidth" : 1,
+        "relief"      : "solid"
+      }
+      self.sTextBarKwargs = {
 
-    # relief options:  
-      # "flat" 
-      # "raised" 
-      # "sunken" 
-      # "ridge" 
-      # "groove" 
-      # "solid"
+      }
+    _init_style()
+
+    def _init_vars():
+      self.filePath = tk.StringVar(value="")
+      self.project = tk.StringVar(value="") 
+      self.projects = [
+        "36001-2 Sunrise - Las Olas", 
+        "36001-2 Jupiter Bridge", 
+        "36001-2 North Causeway",
+        "36001-2 Town of Palm Beach",
+        "36001-2 A1A-Hollywood",
+        "36001-2 Loxahatchee Road",
+        "36001-4 Beeline Highway"
+      ]
+      self.etl = tk.StringVar(value="")
+      self.etls = [
+        "Safety Data ETL", 
+        "Secondary Crash Data ETL",
+        "Mobility Data ETL",
+        "Drive Test Data ETL"
+      ]
+      self.task = tk.StringVar(value="")
+      self.tasks = [
+        "Initial Setup", 
+        "Monthly ETL process",
+        "Data Validation",
+        "Process Validation"
+      ]
+    _init_vars()
 
     self.title("ETL Tool")
     self.state("zoomed")
-    self.configure(background=colors["bg3"])
-    self.rowconfigure(0, weight=1)
-    self.rowconfigure(1, weight=1)
+    self.configure(background=self.colors["bg3"])
+    self.grid_rowconfigure(0, weight=1)
+    self.grid_rowconfigure(1, weight=9)
     self.grid_columnconfigure(0, weight=1)
     self.grid_columnconfigure(1, weight=1)
 
-    style.configure("TFrame",
-      background=colors['bg2'],
-      borderwidth=10,
-      relief="raised",
-      padding=10,
-      # width=300,
-      # height=300
-    )
-    style.configure("TLabel",
-      background=colors["bg2"],
-      foreground=colors["cyan"],
-      font=("Arial", 10),
-      anchor="w",
-      justify="left",
-      padding=10,
-      relief=relief,
-      borderwidth=0,
-      # wraplength=200
-    )
-    style.configure("h2.TLabel",
-      font=("Arial", 15),
-    )
-    style.configure("h1.TLabel",
-      font=("Arial", 20, "italic"),
-    )
-    style.configure("TButton",
-      background=colors['bg0'],   # color
-      foreground=colors['fg0'],   # text color
-      font=("Arial", 10),         # tuple like ("Arial", 10)
-      relief="flat",              # border style
-      borderwidth=0,              # border size
-      padding=10,                 # internal padding
-      # width=100,                # preferred width in text units
-      # height=100,               # preferred height
-      anchor="w",                 # content alignment
-      justify="left",             # text align (for multi-line)
-      # image=,                   # tk.PhotoImage
-      # compound=,                # text+image layout
-      # takefocus=,               # focusable (0 or 1)
-      # focuscolor=,              # color when focused (theme-specific)
-      # highlightthickness=       # focus ring size (theme-specific)
-    )
+    def _init_title_frame():
+      self.titleFrame = tk.Frame(self, **self.frameKwargs)
+      self.titleFrame.grid(row=0, column=0, columnspan=2, **self.gridKwargs)
+      self.titleFrame.grid_rowconfigure(0, weight=1)
+      self.titleFrame.grid_columnconfigure(0, weight=1)
 
-    style.configure("TButton",
-      background=colors["bg3"],
-      foreground=colors["fg1"],
-      font=("Arial", 10),
-      anchor="nw",
-      padding=5,
-      borderwidth=5
-    )
-    style.map("TButton",
-      background=[
-        ("active", colors["bg3"]),
-        ("alternate", colors["bg3"]),
-        ("disabled", colors["bg3"]), 
-        ("focus", colors["bg3"]),
-        ("hover", colors["bg3"]),
-        ("invalid", colors["bg3"]),
-        ("pressed", colors["bg3"]),
-        ("readonly", colors["bg3"]),
-        ("selected", colors["bg3"])
-      ],
-      foreground=[
-        ("active", colors["cyan"]),
-        ("alternate", colors["cyan"]),
-        ("disabled", colors["cyan"]), 
-        ("focus", colors["cyan"]),
-        ("hover", colors["cyan"]),
-        ("invalid", colors["cyan"]),
-        ("pressed", colors["cyan"]),
-        ("readonly", colors["cyan"]),
-        ("selected", colors["cyan"])
-      ],
-    )
-    style.configure("TCombobox",
-      fieldbackground=colors["bg3"],
-      background=colors["bg3"],
-      foreground=colors["fg0"],
-      arrowcolor=colors["cyan"],
-      bordercolor=colors["bg3"],
-      width=30
-    )
+      self.titleLabel = tk.Label(self.titleFrame, text="ETL Tool", **self.h1Kwargs) 
+      self.titleLabel.grid(row=0, column=0, columnspan=2, **self.gridKwargs)
+    _init_title_frame()
 
-    projects = [
-      "36001-2 Sunrise - Las Olas", 
-      "36001-2 Jupiter Bridge", 
-      "36001-2 North Causeway",
-      "36001-2 Town of Palm Beach",
-      "36001-2 A1A-Hollywood",
-      "36001-2 Loxahatchee Road",
-      "36001-4 Beeline Highway"
-    ]
-    etl = [
-      "Safety Data ETL", 
-      "Secondary Crash Data ETL",
-      "Mobility Data ETL",
-      "Drive Test Data ETL"
-    ]
-    tasks = [
-      "Initial Setup", 
-      "Monthly ETL process",
-      "Data Validation",
-      "Process Validation"
-    ]
+    def _init_config_frame():
+      self.configFrame = tk.Frame(self, **self.frameKwargs)
+      self.configFrame.grid(row=1, column=0, **self.gridKwargs)
+      self.configFrame.grid_columnconfigure(0, weight=1)
+      self.configFrame.grid_columnconfigure(1, weight=1)
 
-    self.filePath = tk.StringVar(value="")
-    self.project = tk.StringVar(value="") 
-    self.etl = tk.StringVar(value="")
-    self.task = tk.StringVar(value="")
+      self.configFrameTitle = tk.Label(self.configFrame, text="Configuration", **self.h2Kwargs)
+      self.configFrameTitle.grid(row=0, column=0, columnspan=2, **self.gridKwargs)
 
-    self.titleFrame = ttk.Frame(self, style="TFrame")
-    self.titleFrame.grid(row=0, column=0, rowspan=1, columnspan=2, padx=10, pady=10, ipadx=10, ipady=10, sticky="we")
-    self.titleLabel = ttk.Label(self.titleFrame, text="ETL Tool", style="h1.TLabel")
-    self.titleLabel.grid(row=0, column=0)
+      self.selectFileButton = tk.Button(self.configFrame, text="Select File", command=self.selectFile, **self.buttonKwargs)
+      self.selectFileButton.grid(row=1, column=0, **self.gridKwargs)
 
-    self.configFrame = ttk.Frame(self, style="TFrame")
-    self.configFrame.grid(row=1, column=0, rowspan=1, columnspan=1, padx=10, pady=10, ipadx=10, ipady=10, sticky="nsw")
-    self.configFrameTitle = ttk.Label(self.configFrame, text="Configuration", style="h2.TLabel")
-    self.configFrameTitle.grid(row=0, column=0)
+      self.selectedFileLabel = tk.Label(self.configFrame, text="", **self.labelKwargs)
+      self.selectedFileLabel.grid(row=1, column=1, **self.gridKwargs)
 
-    self.selectFileButton = ttk.Button(self.configFrame, text="Select File", style="TButton", command=self.selectFile)
-    self.selectFileButton.grid(row=1, column=0)
-    self.selectedFileLabel = ttk.Label(self.configFrame, text="", style="TLabel")
-    self.selectedFileLabel.grid(row=1, column=1)
-    self.selectProjectLabel = ttk.Label(self.configFrame, text="Select Project: ", style="TLabel")
-    self.selectProjectLabel.grid(row=2, column=0)
-    self.projectDropDown = ttk.Combobox(self.configFrame, textvariable=self.project, values=projects, state="readonly", style="TCombobox")
-    self.projectDropDown.grid(row=2, column=1)
-    self.selectEtlLabel = ttk.Label(self.configFrame, text="Select ETL Pipeline: ", style="TLabel")
-    self.selectEtlLabel.grid(row=3, column=0)
-    self.etlDropDown = ttk.Combobox(self.configFrame, textvariable=self.etl, values=etl, state="readonly", style="TCombobox")
-    self.etlDropDown.grid(row=3, column=1)
-    self.selectTaskLabel = ttk.Label(self.configFrame, text="Select Task: ", style="TLabel")
-    self.selectTaskLabel.grid(row=4, column=0)
-    self.taskDropDown = ttk.Combobox(self.configFrame, textvariable=self.task, values=tasks, state="readonly", style="TCombobox")
-    self.taskDropDown.grid(row=4, column=1)
-    self.runButton = ttk.Button(self.configFrame, text="Run Task", style="TButton", command=self.runTask)
-    self.runButton.grid(row=5, column=0)
+      self.selectProjectLabel = tk.Label(self.configFrame, text="Select Project: ", **self.labelKwargs)
+      self.selectProjectLabel.grid(row=2, column=0, **self.gridKwargs)
 
-    self.outputFrame = ttk.Frame(self, style="TFrame")
-    self.outputFrame.grid(row=1, column=1, rowspan=1, columnspan=1, padx=10, pady=10, ipadx=10, ipady=10, sticky="nse")
-    self.outputFrameTitle = ttk.Label(self.outputFrame, text="Output", style="h2.TLabel")
-    self.outputFrameTitle.grid(row=0, column=0)
+      self.projectDropDown = tk.OptionMenu(self.configFrame, self.project, *self.projects, **self.optMenuKwargs)
+      self.projectDropDown.grid(row=2, column=1, **self.gridKwargs)
 
-    self.output = ScrolledText(self.outputFrame, height=30, width=80, state='disabled', font=("Consolas", 10))
-    self.output.grid(row=1, column=0)
+      self.selectEtlLabel = tk.Label(self.configFrame, text="Select ETL Pipeline: ", **self.labelKwargs)
+      self.selectEtlLabel.grid(row=3, column=0, **self.gridKwargs)
+
+      self.etlDropDown = tk.OptionMenu(self.configFrame, self.etl, *self.etls, **self.optMenuKwargs)
+      self.etlDropDown.grid(row=3, column=1, **self.gridKwargs)
+
+      self.selectTaskLabel = tk.Label(self.configFrame, text="Select Task: ", **self.labelKwargs)
+      self.selectTaskLabel.grid(row=4, column=0, **self.gridKwargs)
+
+      self.taskDropDown = tk.OptionMenu(self.configFrame, self.task, *self.tasks, **self.optMenuKwargs)
+      self.taskDropDown.grid(row=4, column=1, **self.gridKwargs)
+
+      self.runButton = tk.Button(self.configFrame, text="Run Task", command=self.runTask, **self.buttonKwargs)
+      self.runButton.grid(row=5, column=0, **self.gridKwargs)
+    _init_config_frame()
+
+    def _init_output_frame():
+      self.outputFrame = tk.Frame(self, **self.frameKwargs)
+      self.outputFrame.grid(row=1, column=1, **self.gridKwargs)
+      self.outputFrame.grid_rowconfigure(1, weight=1)
+      self.outputFrame.grid_columnconfigure(0, weight=1)
+      
+      self.outputFrameTitle = tk.Label(self.outputFrame, text="Output", **self.h2Kwargs)
+      self.outputFrameTitle.grid(row=0, column=0, **self.gridKwargs)
+
+      self.output = ScrolledText(self.outputFrame, **self.sTextKwargs)
+      self.output.grid(row=1, column=0, **self.gridKwargs)
+      self.output.vbar.config(**self.sTextBarKwargs)
+    _init_output_frame()
 
   def selectFile(self):
     self.filePath = askopenfilename()
