@@ -10,15 +10,14 @@ from azure.storage.blob import BlobServiceClient
 class App(tk.Tk):
   def __init__(self):
     super().__init__()
-
     def _init_style():
       self.fonts = {
-        "h1": ("Arial", 20),
-        "h1i": ("Arial", 20, "italic"),
-        "h1b": ("Arial", 20, "bold"),
-        "h2": ("Arial", 16),
-        "h2i": ("Arial", 16, "italic"),
-        "h2b": ("Arial", 16, "bold"),
+        "h1": ("Arial", 24),
+        "h1i": ("Arial", 24, "italic"),
+        "h1b": ("Arial", 24, "bold"),
+        "h2": ("Arial", 20),
+        "h2i": ("Arial", 20, "italic"),
+        "h2b": ("Arial", 20, "bold"),
         "b": ("Arial", 10),
         "bi": ("Arial", 10, "italic"),
         "bb": ("Arial", 10, "bold"),
@@ -84,7 +83,7 @@ class App(tk.Tk):
       self.buttonKwargs = {
         "background"  : self.colors['bg3'],
         "foreground"  : self.colors['cyan'],
-        "font"        : ("Arial", 10),
+        "font"        : self.fonts['b'],
         "justify"     : "left",
         "anchor"      : "center",
         "borderwidth" : 1,
@@ -158,7 +157,7 @@ class App(tk.Tk):
         "relief"      : "solid"
       }
       self.sTextBarKwargs = {
-
+        
       }
     _init_style()
 
@@ -235,12 +234,16 @@ class App(tk.Tk):
       self.selectEtlLabel.grid(row=3, column=0, **self.gridKwargs)
 
       self.etlOptMenu = tk.OptionMenu(self.configFrame, self.etl, *self.etls)
+      self.etlOptMenu.config(**self.menuButtonKwargs)
+      self.etlOptMenu['menu'].config(**self.menuKwargs)
       self.etlOptMenu.grid(row=3, column=1, **self.gridKwargs)
 
       self.selectTaskLabel = tk.Label(self.configFrame, text="Select Task: ", **self.labelKwargs)
       self.selectTaskLabel.grid(row=4, column=0, **self.gridKwargs)
 
       self.taskOptMenu = tk.OptionMenu(self.configFrame, self.task, *self.tasks)
+      self.taskOptMenu.config(**self.menuButtonKwargs)
+      self.taskOptMenu['menu'].config(**self.menuKwargs)
       self.taskOptMenu.grid(row=4, column=1, **self.gridKwargs)
 
       self.runButton = tk.Button(self.configFrame, text="Run Task", command=self.runTask, **self.buttonKwargs)
