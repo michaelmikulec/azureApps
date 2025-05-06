@@ -25,6 +25,15 @@ class App(tk.Tk):
         "mi": ("Consolas", 12, "italic"),
         "mb": ("Consolas", 12, "bold"),
       }
+      self.justify = "left"
+      self.padx = 10
+      self.pady = 10
+      self.ipadx = 10
+      self.ipady = 10
+      self.anchor = "center"
+      self.sticky = "nsew"
+      self.bd = 1
+      self.relief = "solid"
       self.colors = {
         "bg3"     : "#002b36",
         "bg2"     : "#073642",
@@ -43,34 +52,41 @@ class App(tk.Tk):
         "white"   : "#ffffff",
         "black"   : "#000000",
       }
-      self.reliefs = { 
-        "flat"   : "flat",
-        "raised" : "raised",
-        "sunken" : "sunken",
-        "ridge"  : "ridge",
-        "groove" : "groove",
-        "solid"  : "solid",
-      }
+      self.frameBg = self.colors['bg2']
+      self.bg = self.colors['bg3']
+      self.fg = self.colors['cyan']
+      self.activeBg = self.colors['bg3']
+      self.activeFg = self.colors['cyan']
+      self.disabledBg = self.colors['bg3']
+      self.disabledFg = self.colors['bg0']
+      # self.reliefs = { 
+      #   "flat"   : "flat",
+      #   "raised" : "raised",
+      #   "sunken" : "sunken",
+      #   "ridge"  : "ridge",
+      #   "groove" : "groove",
+      #   "solid"  : "solid",
+      # }
       self.gridKwargs = {
-        "padx"   : 10,
-        "pady"   : 10,
-        "ipadx"  : 10,
-        "ipady"  : 10,
-        "sticky" : "nsew",
+        "padx"   : self.padx,
+        "pady"   : self.pady,
+        "ipadx"  : self.ipadx,
+        "ipady"  : self.ipady,
+        "sticky" : self.sticky,
       }
       self.frameKwargs = {
         "background"  : self.colors['bg2'],
-        "borderwidth" : 1,
-        "relief"      : "solid"
+        "borderwidth" : self.bd,
+        "relief"      : self.relief,
       }
       self.labelKwargs = {
-        "background"  : self.colors["bg3"],
-        "foreground"  : self.colors["cyan"],
+        "background"  : self.bg,
+        "foreground"  : self.fg,
         "font"        : self.fonts['b'],
-        "justify"     : "left",
-        "anchor"      : "center",
-        "borderwidth" : 1,
-        "relief"      : "solid",
+        "justify"     : self.justify,
+        "anchor"      : self.anchor,
+        "borderwidth" : self.bd,
+        "relief"      : self.relief,
       }
       self.h1Kwargs = {
         **self.labelKwargs,
@@ -81,70 +97,70 @@ class App(tk.Tk):
         "font": self.fonts['h2i'],
       }
       self.buttonKwargs = {
-        "background"  : self.colors['bg3'],
-        "foreground"  : self.colors['cyan'],
+        "background"  : self.bg,
+        "foreground"  : self.fg,
         "font"        : self.fonts['b'],
-        "justify"     : "left",
-        "anchor"      : "center",
-        "borderwidth" : 1,
-        "relief"      : "solid",
+        "justify"     : self.justify,
+        "anchor"      : self.anchor,
+        "borderwidth" : self.bd,
+        "relief"      : self.relief,
       }
       self.menuButtonKwargs = {
-        # "activebackground": ,
-        # "activeforeground": ,
-        # "anchor": ,
-        "background": self.colors['bg3'],
-        # "bd": ,
-        # "bg": ,
+        "background": self.bg,
+        "bg": self.bg,
+        "activebackground": self.colors['cyan'],
+        "disabledforeground": self.colors['bg0'],
+        "foreground": self.fg,
+        "fg": self.fg,
+        "activeforeground": self.colors['bg3'],
         # "bitmap": ,
-        "borderwidth": 1,
-        # "cursor": ,
-        # "direction": ,
-        # "disabledforeground": ,
-        # "fg": ,
-        "font": self.fonts['b'],
-        "foreground": self.colors['cyan'],
-        # "height": ,
-        # "highlightbackground": ,
-        # "highlightcolor": ,
-        # "highlightthickness": ,
+        "cursor": "hand2",
+        "direction": "below",
+        "highlightbackground": self.colors['bg3'],
+        "highlightcolor": self.colors['cyan'],
+        "highlightthickness": self.bd,
         # "image": ,
-        # "indicatoron": ,
+        "indicatoron": True,
+        # "anchor": ,
+        "padx": self.padx,
+        "pady": self.pady,
+        "borderwidth": self.bd,
+        "bd": self.bd,
+        "relief": self.relief,
+        "font": self.fonts['b'],
+        # "text": "",
+        # "textvariable": "",
+        # "underline": ,
         # "justify": ,
+        # "height": ,
+        # "width": 30,
+        # "wraplength": 40,
         # "menu": ,
-        # "padx": ,
-        # "pady": ,
-        "relief": "solid",
         # "compound": ,
         # "state": ,
         # "takefocus": ,
-        # "text": ,
-        # "textvariable": ,
-        # "underline": ,
-        # "width": ,
-        # "wraplength": ,
       }
       self.menuKwargs = { 
-        # "activebackground": ,
-        # "activeborderwidth": ,
-        # "activeforeground": ,
-        "background": self.colors['bg3'],
-        # "bd": ,
-        # "bg": ,
-        "borderwidth": 1,
+        "activebackground": self.colors['cyan'],
+        "background": self.bg,
+        "bg": self.bg,
+        "activeforeground": self.colors['bg3'],
+        "disabledforeground": self.colors['violet'],
+        "foreground": self.fg,
+        "fg": self.fg,
+        "borderwidth": self.bd,
+        "bd": self.bd,
+        "activeborderwidth": self.bd,
         # "cursor": ,
-        # "disabledforeground": ,
-        # "fg": ,
         "font": self.fonts['b'],
-        "foreground": self.colors['cyan'],
+        "relief": self.relief,
+        "selectcolor": self.colors['bg1'],
+        # "title": "",
+        "type": "normal",
+        # "takefocus": True,
+        # "tearoff": True,
+        # "tearoffcommand": True,
         # "postcommand": ,
-        "relief": "solid",
-        # "selectcolor": ,
-        # "takefocus": ,
-        # "tearoff": ,
-        # "tearoffcommand": ,
-        # "title": ,
-        # "type": ,
       }
       self.sTextKwargs = {
         "state"       : 'disabled',
@@ -226,7 +242,7 @@ class App(tk.Tk):
       self.selectProjectLabel.grid(row=2, column=0, **self.gridKwargs)
 
       self.projectOptMenu = tk.OptionMenu(self.configFrame, self.project, *self.projects)
-      self.projectOptMenu.config(**self.menuButtonKwargs)
+      self.projectOptMenu.config(**self.menuButtonKwargs, text="Select Project", textvariable=self.project)
       self.projectOptMenu['menu'].config(**self.menuKwargs)
       self.projectOptMenu.grid(row=2, column=1, **self.gridKwargs)
 
@@ -234,7 +250,7 @@ class App(tk.Tk):
       self.selectEtlLabel.grid(row=3, column=0, **self.gridKwargs)
 
       self.etlOptMenu = tk.OptionMenu(self.configFrame, self.etl, *self.etls)
-      self.etlOptMenu.config(**self.menuButtonKwargs)
+      self.etlOptMenu.config(**self.menuButtonKwargs, text="Select ETL Pipeline", textvariable=self.etl)
       self.etlOptMenu['menu'].config(**self.menuKwargs)
       self.etlOptMenu.grid(row=3, column=1, **self.gridKwargs)
 
@@ -242,7 +258,7 @@ class App(tk.Tk):
       self.selectTaskLabel.grid(row=4, column=0, **self.gridKwargs)
 
       self.taskOptMenu = tk.OptionMenu(self.configFrame, self.task, *self.tasks)
-      self.taskOptMenu.config(**self.menuButtonKwargs)
+      self.taskOptMenu.config(**self.menuButtonKwargs, text="Select Task", textvariable=self.task)
       self.taskOptMenu['menu'].config(**self.menuKwargs)
       self.taskOptMenu.grid(row=4, column=1, **self.gridKwargs)
 
