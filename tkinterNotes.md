@@ -2,6 +2,31 @@
 **Author**: John W. Shipman</br>
 **Link**: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/index.html
 
+## Sample Application
+```
+import tkinter as tk
+
+class App(tk.Frame):
+  def __init__(self, master=None):
+    tk.Frame.__init__(self, master)
+    self.grid(sticky=tk.N+tk.S+tk.E+tk.W)
+    self.createWidgets()
+
+  def createWidgets(self):
+    top=self.winfo_toplevel()                
+    top.rowconfigure(0, weight=1)            
+    top.columnconfigure(0, weight=1)         
+    self.rowconfigure(0, weight=1)           
+    self.columnconfigure(0, weight=1)        
+    self.quit = tk.Button(self, text='Quit', command=self.quit)
+    self.quit.grid(row=0, column=0,          
+      sticky=tk.N+tk.S+tk.E+tk.W)
+
+app = App()
+app.master.title('Sample application')
+app.mainloop()
+```
+
 ## 3. Definitions
 * window
 * top-level window
