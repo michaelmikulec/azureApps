@@ -178,8 +178,10 @@ class App(tk.Tk):
     _init_style()
 
     def _init_vars():
+      self.etl = tk.StringVar(value="")
       self.filePath = tk.StringVar(value="")
       self.project = tk.StringVar(value="") 
+      self.task = tk.StringVar(value="")
       self.projects = [
         "36001-2 Sunrise - Las Olas", 
         "36001-2 Jupiter Bridge", 
@@ -189,14 +191,12 @@ class App(tk.Tk):
         "36001-2 Loxahatchee Road",
         "36001-4 Beeline Highway"
       ]
-      self.etl = tk.StringVar(value="")
       self.etls = [
         "Safety Data ETL", 
         "Secondary Crash Data ETL",
         "Mobility Data ETL",
         "Drive Test Data ETL"
       ]
-      self.task = tk.StringVar(value="")
       self.tasks = [
         "Initial Setup", 
         "Monthly ETL process",
