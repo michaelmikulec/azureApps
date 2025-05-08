@@ -5,18 +5,23 @@ from Editor import Editor
 from SecondarySidebar import SecondarySidebar
 from Panel import Panel
 from Statusbar import Statusbar
-from Theme import * 
+from Theme import Theme 
 
-class App(tk.Frame):
-  def __init__(self, master=None):
-    super().__init__(master)
-    self.grid(sticky="nsew")
+class App(tk.Tk):
+  def __init__(self):
+    super().__init__()
+    self.title("MPM")
+    self.state('zoomed')
+    self.theme = Theme() 
+
     self.rowconfigure(0, weight=1)
-    self.rowconfigure(1, weight=48)
-    self.rowconfigure(2, weight=48)
+    self.rowconfigure(1, weight=70)
+    self.rowconfigure(2, weight=28)
     self.rowconfigure(3, weight=1)
-    for i in range(100):
-      self.columnconfigure(i, weight=1)
+    self.columnconfigure(0, weight=10)
+    self.columnconfigure(1, weight=80)
+    self.columnconfigure(2, weight=10)
+
     self.initMenubar()
     self.initSidebar()
     self.initEditor()
@@ -25,35 +30,28 @@ class App(tk.Frame):
     self.initStatusbar()
 
   def initMenubar(self):
-    menubar = Menubar(self, **frameTheme)
-    menubar.grid(row=0, column=0, columnspan=100, sticky="ew")
+    self.menubar = Menubar(self, self.theme)
+    self.menubar.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
   def initSidebar(self):
-    sidebar = Sidebar(self)
-    sidebar.grid(row=1, column=0, columnspan=10, sticky="nsw")
+    self.sidebar = Sidebar(self, self.theme)
+    self.sidebar.grid(row=1, rowspan=2, column=0, sticky="nsew")
 
   def initEditor(self):
-    editor = Editor(self)
-    editor.grid(row=1, column=10, columnspan=80, sticky="nsew")
+    self.editor = Editor(self, self.theme)
+    self.editor.grid(row=1, column=1, sticky="nsew")
 
   def initSecondarySidebar(self):
-    secondarySidebar = SecondarySidebar(self)
-    secondarySidebar.grid(row=1, column=90, columnspan=10, sticky="nse")
+    self.secondarySidebar = SecondarySidebar(self, self.theme)
+    self.secondarySidebar.grid(row=1, rowspan=2, column=2, sticky="nsew")
 
   def initPanel(self):
-    panel = Panel(self)
-    panel.grid(row=2, column=0, columnspan=100, sticky="ew")
+    self.panel = Panel(self, self.theme)
+    self.panel.grid(row=2, column=1, sticky="nsew")
 
   def initStatusbar(self):
-    statusbar = Statusbar(self)
-    statusbar.grid(row=3, column=0, columnspan=100, sticky="ew")
+    self.statusbar = Statusbar(self, self.theme)
+    self.statusbar.grid(row=3, column=0, columnspan=3, sticky="nsew")
 
 if __name__ == "__main__":
-  root = tk.Tk()
-  root.rowconfigure(0, weight=1)
-  root.columnconfigure(0, weight=1)
-  app = App(root)
-  root.title("My App")
-  root.state('zoomed')
-  root.mainloop()
-
+  App().mainloop()

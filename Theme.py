@@ -1,3 +1,144 @@
+import tkinter as tk
+from tkinter import ttk
+
+class Theme:
+  def __init__(self):
+    self.font = ("Arial", 12)
+    self.monoFont = ("Consolas", 12)
+    self.justify = "left"
+    self.anchor = "center"
+    self.background = "#002b36"
+    self.foreground = "#2aa198"
+    self.activebackground = "#2aa198"
+    self.activeforeground = "#002b36"
+    self.disabledforeground = "#657b83"
+    self.highlightbackground = "#002b36"
+    self.highlightcolor = "#2aa198"
+    self.highlightthickness = 1
+    self.borderwidth = 1
+    self.relief = "solid"
+    self.frame = {
+      "background"  : self.background,
+      "borderwidth" : self.borderwidth,
+      "relief"      : self.relief,
+    }
+    self.label = {
+      "background"  : self.background,
+      "foreground"  : self.foreground,
+      "font"        : self.font,
+      "justify"     : self.justify,
+      "anchor"      : self.anchor,
+      "borderwidth" : self.borderwidth,
+      "relief"      : self.relief,
+    }
+    self.button = {
+      "background"  : self.background,
+      "foreground"  : self.foreground,
+      "font"        : self.font,
+      "justify"     : self.justify,
+      "anchor"      : self.anchor,
+      "borderwidth" : self.borderwidth,
+      "relief"      : self.relief,
+    }
+    self.menu = {
+      "background"         : self.background,
+      "foreground"         : self.foreground,
+      "borderwidth"        : self.borderwidth,
+      "activebackground"   : self.activebackground,
+      "activeforeground"   : self.activeforeground,
+      "disabledforeground" : self.disabledforeground,
+      "relief"             : self.relief,
+      "font"               : self.font,
+    }
+    self.menuButton = {
+      "background"          : self.background,
+      "foreground"          : self.foreground,
+      "activebackground"    : self.activebackground,
+      "activeforeground"    : self.activeforeground,
+      "disabledforeground"  : self.disabledforeground,
+      "highlightbackground" : self.background,
+      "highlightcolor"      : self.foreground,
+      "highlightthickness"  : self.highlightthickness,
+      "borderwidth"         : self.borderwidth,
+      "relief"              : self.relief,
+      "font"                : self.font,
+    }
+    self.scrolledText = {
+      "background"  : self.background,
+      "foreground"  : self.foreground,
+      "font"        : self.monoFont,
+      "height"      : 30,
+      "width"       : 80,
+      "borderwidth" : self.borderwidth,
+      "relief"      : self.relief,
+    }
+    self.menubar = {
+      "frame": self.frame,
+      "label": self.label,
+      "button": self.button,
+      "menu": self.menu,
+      "menuButton": self.menuButton,
+      "scrolledText": self.scrolledText,
+    }
+
+# menuButtonTheme = {
+#   "bg": bg,
+#   "background": bg,
+#   "activebackground": colors['cyan'],
+#   "fg": fg,
+#   "foreground": fg,
+#   "activeforeground": colors['bg3'],
+#   "disabledforeground": colors['bg0'],
+#   "direction": "below",
+#   "borderwidth": bd,
+#   "bd": bd,
+#   "highlightbackground": colors['bg3'],
+#   "highlightcolor": colors['cyan'],
+#   "highlightthickness": bd,
+#   "image": ,
+#   "bitmap": ,
+#   "cursor": "hand2",
+#   "indicatoron": True,
+#   "anchor": ,
+#   "padx": padx,
+#   "pady": pady,
+#   "relief": relief,
+#   "font": fonts['b'],
+#   "text": "",
+#   "textvariable": "",
+#   "underline": ,
+#   "justify": ,
+#   "height": ,
+#   "width": 30,
+#   "wraplength": 40,
+#   "menu": ,
+#   "compound": ,
+#   "state": ,
+#   "takefocus": ,
+# }
+# menuTheme = { 
+#   "activebackground": colors['cyan'],
+#   "background": bg,
+#   "bg": bg,
+#   "activeforeground": colors['bg3'],
+#   "disabledforeground": colors['violet'],
+#   "foreground": fg,
+#   "fg": fg,
+#   "borderwidth": bd,
+#   "bd": bd,
+#   "activeborderwidth": bd,
+#   "cursor": ,
+#   "font": fonts['b'],
+#   "relief": relief,
+#   "selectcolor": colors['bg1'],
+#   "title": "",
+#   "type": "normal",
+#   "takefocus": True,
+#   "tearoff": True,
+#   "tearoffcommand": True,
+#   "postcommand": ,
+# }
+
 fonts = {
   "h1": ("Arial", 24),
   "h1i": ("Arial", 24, "italic"),
@@ -37,33 +178,43 @@ activeforeground = colors['bg3']
 disabledforeground = colors['bg0']
 highlightbackground = colors['bg3']
 highlightcolor = colors['cyan']
-highlightthickness = borderwidth = 1
+highlightthickness = 1
+borderwidth = 1
 relief = "solid"
-
-frameTheme = {
-  "background"  : background,
-  "borderwidth" : borderwidth,
-  "relief"      : relief,
+theme = {
+  "frameTheme" : {
+    "background"  : background,
+    "borderwidth" : borderwidth,
+    "relief"      : relief,
+  },
+  "labelTheme" : {
+    "background"  : background,
+    "foreground"  : foreground,
+    "font"        : fonts['b'],
+    "justify"     : "left",
+    "anchor"      : "center",
+    "borderwidth" : borderwidth,
+    "relief"      : relief,
+  },
+  "buttonTheme" : {
+    "background"  : background,
+    "foreground"  : foreground,
+    "font"        : fonts['b'],
+    "justify"     : "left",
+    "anchor"      : "center",
+    "borderwidth" : borderwidth,
+    "relief"      : relief,
+  },
+  "scrolledTextTheme": {
+    "background": background,
+    "foreground": foreground,
+    "font": fonts['m'],
+    "height": 30,
+    "width": 80,
+    "borderwidth": borderwidth,
+    "relief": relief,
+  }
 }
-labelTheme = {
-  "background"  : background,
-  "foreground"  : foreground,
-  "font"        : fonts['b'],
-  "justify"     : "left",
-  "anchor"      : "center",
-  "borderwidth" : borderwidth,
-  "relief"      : relief,
-}
-buttonTheme = {
-  "background"  : background,
-  "foreground"  : foreground,
-  "font"        : fonts['b'],
-  "justify"     : "left",
-  "anchor"      : "center",
-  "borderwidth" : borderwidth,
-  "relief"      : relief,
-}
-
 # h1Kwargs = {
 #   **labelTheme,
 #   "font": fonts['h1i'],
@@ -71,71 +222,4 @@ buttonTheme = {
 # h2Kwargs = {
 #   **labelTheme,
 #   "font": fonts['h2i'],
-# }
-# menuButtonTheme = {
-#   "background": bg,
-#   "bg": bg,
-#   "activebackground": colors['cyan'],
-#   "disabledforeground": colors['bg0'],
-#   "foreground": fg,
-#   "fg": fg,
-#   "activeforeground": colors['bg3'],
-#   # "bitmap": ,
-#   "cursor": "hand2",
-#   "direction": "below",
-#   "highlightbackground": colors['bg3'],
-#   "highlightcolor": colors['cyan'],
-#   "highlightthickness": bd,
-#   # "image": ,
-#   "indicatoron": True,
-#   # "anchor": ,
-#   "padx": padx,
-#   "pady": pady,
-#   "borderwidth": bd,
-#   "bd": bd,
-#   "relief": relief,
-#   "font": fonts['b'],
-#   # "text": "",
-#   # "textvariable": "",
-#   # "underline": ,
-#   # "justify": ,
-#   # "height": ,
-#   # "width": 30,
-#   # "wraplength": 40,
-#   # "menu": ,
-#   # "compound": ,
-#   # "state": ,
-#   # "takefocus": ,
-# }
-# menuTheme = { 
-#   "activebackground": colors['cyan'],
-#   "background": bg,
-#   "bg": bg,
-#   "activeforeground": colors['bg3'],
-#   "disabledforeground": colors['violet'],
-#   "foreground": fg,
-#   "fg": fg,
-#   "borderwidth": bd,
-#   "bd": bd,
-#   "activeborderwidth": bd,
-#   # "cursor": ,
-#   "font": fonts['b'],
-#   "relief": relief,
-#   "selectcolor": colors['bg1'],
-#   # "title": "",
-#   "type": "normal",
-#   # "takefocus": True,
-#   # "tearoff": True,
-#   # "tearoffcommand": True,
-#   # "postcommand": ,
-# }
-# sTextKwargs = {
-#   "state"       : 'disabled',
-#   "background"  : colors['bg3'],
-#   "foreground"  : colors['cyan'],
-#   "font"        : fonts['m'],
-#   "height"      : 30,
-#   "width"       : 80,
-#   "borderwidth" : 1,
-#   "relief"      : "solid"
 # }

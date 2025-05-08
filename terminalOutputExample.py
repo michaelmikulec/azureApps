@@ -23,5 +23,15 @@ class App(tk.Tk):
     # You can print anything here
     self.write_to_output("Task finished.")
 
-app = App()
-app.mainloop()
+# app = App()
+# app.mainloop()
+
+root = tk.Tk() 
+# menubar = tk.Menu(root)
+# root.config(menu=menubar)
+# file_menu = tk.Menu(menubar, tearoff=0)
+# menubar.add_cascade(label="File", menu=file_menu)
+# file_menu.add_command(label="Open", command=...)
+# file_menu.add_separator()
+# file_menu.add_command(label="Exit", command=root.quit)
+root.mainloop()
